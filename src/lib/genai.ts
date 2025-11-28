@@ -17,21 +17,27 @@ export async function understandQuery(userQuery: string): Promise<SearchIntent> 
     }
 
     const prompt = `
-  You are an expert Quran search assistant. Analyze the user's query and determine the best way to search the Quran.
+  You are an expert Quran search assistant. Your goal is to understand the user's intent, even if they use phonetic spelling or broad concepts.
   
   Query: "${userQuery}"
+  
+  Instructions:
+  1. **Phonetic Correction**: If the user uses phonetic spelling (e.g., "Emaam", "Wudu", "Salah"), convert it to the standard English or Transliterated spelling (e.g., "Imam", "Wudu", "Salah").
+  2. **Semantic Search**: If the user asks for a concept (e.g., "Leader"), include relevant Arabic terms (e.g., "Imam") in the query to broaden the search.
+  3. **Keywords**: Extract the most relevant keywords for a search engine.
   
   Output JSON only:
   {
     "type": "keyword" | "verse_key" | "topic",
-    "query": "optimized search keywords or topic",
-    "verseKey": "chapter:verse" (only if specific verse is requested, e.g. "2:255")
+    "query": "optimized search keywords (include synonyms/Arabic terms if helpful)",
+    "verseKey": "chapter:verse" (only if specific verse is requested)
   }
   
   Examples:
-  "verses about patience" -> {"type": "topic", "query": "patience"}
+  "verses about patience" -> {"type": "topic", "query": "patience sabr"}
   "surah baqarah verse 255" -> {"type": "verse_key", "query": "Ayatul Kursi", "verseKey": "2:255"}
   "tell me about moses" -> {"type": "keyword", "query": "Moses Musa"}
+  "what does the quran say about emaam" -> {"type": "topic", "query": "Imam Leader"}
   `;
 
     try {
