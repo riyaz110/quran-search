@@ -13,7 +13,7 @@ export async function GET(request: Request) {
     try {
         // 1. Understand the query using GenAI
         const intent = await understandQuery(query);
-        console.log('Search Intent:', intent);
+        console.log('Search Intent:', JSON.stringify(intent, null, 2)); // DEBUG LOG
 
         let results: Verse[] = [];
 
@@ -28,9 +28,11 @@ export async function GET(request: Request) {
             // A. Fetch Recommended Verses (if any)
             let recommendedResults: Verse[] = [];
             if (intent.recommendedVerses && intent.recommendedVerses.length > 0) {
+                console.log('Fetching recommended verses:', intent.recommendedVerses); // DEBUG LOG
                 const recommendedPromises = intent.recommendedVerses.map(async (vk) => {
                     try {
-                        return await getVerseWithContext(vk, 0); // No context for list view to keep it clean, or 1 if preferred
+                        const v = await getVerseWithContext(vk, 0);
+                        return v;
                     } catch (e) {
                         console.error(`Failed to fetch recommended verse ${vk}`, e);
                         return [];
@@ -38,10 +40,12 @@ export async function GET(request: Request) {
                 });
                 const recommendedNested = await Promise.all(recommendedPromises);
                 recommendedResults = recommendedNested.flat();
+                console.log('Fetched recommended count:', recommendedResults.length); // DEBUG LOG
             }
 
             // B. Keyword/Topic search
             // Use the optimized query from GenAI to search the Quran API
+            console.log('Executing keyword search for:', intent.query); // DEBUG LOG
             const searchResults = await searchVerses(intent.query);
 
             // For each result, we want to get the full details (translations, etc.)
@@ -70,6 +74,7 @@ export async function GET(request: Request) {
             });
         }
 
+        console.log('Total results returned:', results.length); // DEBUG LOG
         return NextResponse.json({ intent, results });
     } catch (error) {
         console.error('Search API Error:', error);
