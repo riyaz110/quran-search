@@ -190,44 +190,44 @@ function VerseCard({ verse, showYusufAli, showPickthall, showSahih, showTranslit
                 {/* Translations */}
                 <div className="space-y-6 w-full">
                     {showTransliteration && (
-                        <div className="space-y-1">
-                            <p className="text-lg text-gray-500 dark:text-gray-400 leading-relaxed italic">
+                        <div className="pt-4 border-t border-gray-100 dark:border-gray-700">
+                            <p className="text-lg md:text-xl text-gray-800 dark:text-gray-200 leading-relaxed">
                                 {cleanText(getTranslation(EDITIONS.transliteration))}
                             </p>
-                            <p className="text-xs text-gray-400 font-medium uppercase tracking-wider">Transliteration</p>
+                            <p className="mt-3 text-xs text-gray-400 font-bold uppercase tracking-wider">Transliteration</p>
                         </div>
                     )}
 
                     {showSahih && (
-                        <div className="space-y-1 pt-4 border-t border-gray-100 dark:border-gray-700">
+                        <div className="pt-4 border-t border-gray-100 dark:border-gray-700">
                             <p className="text-lg md:text-xl text-gray-800 dark:text-gray-200 leading-relaxed">
                                 {cleanText(getTranslation(EDITIONS.sahih))}
                             </p>
-                            <p className="text-xs text-gray-400 font-medium uppercase tracking-wider">Sahih International</p>
+                            <p className="mt-3 text-xs text-gray-400 font-bold uppercase tracking-wider">Sahih International</p>
                         </div>
                     )}
 
                     {showYusufAli && (
-                        <div className="space-y-1 pt-4 border-t border-gray-100 dark:border-gray-700">
-                            <p className="text-base md:text-lg text-gray-600 dark:text-gray-400 leading-relaxed italic font-serif">
-                                "{cleanText(getTranslation(EDITIONS.yusufali))}"
+                        <div className="pt-4 border-t border-gray-100 dark:border-gray-700">
+                            <p className="text-lg md:text-xl text-gray-800 dark:text-gray-200 leading-relaxed">
+                                {cleanText(getTranslation(EDITIONS.yusufali))}
                             </p>
-                            <p className="text-xs text-gray-400 font-medium uppercase tracking-wider">Yusuf Ali</p>
+                            <p className="mt-3 text-xs text-gray-400 font-bold uppercase tracking-wider">Yusuf Ali</p>
                         </div>
                     )}
 
                     {showPickthall && (
-                        <div className="space-y-1 pt-4 border-t border-gray-100 dark:border-gray-700">
-                            <p className="text-base md:text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
+                        <div className="pt-4 border-t border-gray-100 dark:border-gray-700">
+                            <p className="text-lg md:text-xl text-gray-800 dark:text-gray-200 leading-relaxed">
                                 {cleanText(getTranslation(EDITIONS.pickthall))}
                             </p>
-                            <p className="text-xs text-gray-400 font-medium uppercase tracking-wider">Pickthall</p>
+                            <p className="mt-3 text-xs text-gray-400 font-bold uppercase tracking-wider">Pickthall</p>
                         </div>
                     )}
                 </div>
             </div>
 
-            {/* Action Bar (Placeholder) */}
+            {/* Action Bar */}
             <div className="bg-gray-50 dark:bg-gray-900/50 px-6 py-3 flex justify-end gap-4 border-t border-gray-100 dark:border-gray-700 opacity-0 group-hover:opacity-100 transition-opacity">
                 <button className="text-xs font-medium text-gray-500 hover:text-primary uppercase tracking-wide">Copy</button>
                 <button className="text-xs font-medium text-gray-500 hover:text-primary uppercase tracking-wide">Tafsir</button>
