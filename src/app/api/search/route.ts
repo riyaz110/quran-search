@@ -23,7 +23,24 @@ export async function GET(request: Request) {
             const verses = await getVerseWithContext(intent.verseKey, 1); // 1 verse before/after
             results = verses;
         } else {
-            // Keyword/Topic search
+            // Hybrid Search: Recommended Verses + Keyword Search
+
+            // A. Fetch Recommended Verses (if any)
+            let recommendedResults: Verse[] = [];
+            if (intent.recommendedVerses && intent.recommendedVerses.length > 0) {
+                const recommendedPromises = intent.recommendedVerses.map(async (vk) => {
+                    try {
+                        return await getVerseWithContext(vk, 0); // No context for list view to keep it clean, or 1 if preferred
+                    } catch (e) {
+                        console.error(`Failed to fetch recommended verse ${vk}`, e);
+                        return [];
+                    }
+                });
+                const recommendedNested = await Promise.all(recommendedPromises);
+                recommendedResults = recommendedNested.flat();
+            }
+
+            // B. Keyword/Topic search
             // Use the optimized query from GenAI to search the Quran API
             const searchResults = await searchVerses(intent.query);
 
@@ -39,8 +56,10 @@ export async function GET(request: Request) {
             });
 
             const detailedResultsNested = await Promise.all(detailedResultsPromises);
-            // Flatten the array
-            results = detailedResultsNested.flat();
+            const keywordResults = detailedResultsNested.flat();
+
+            // C. Merge Results (Recommended first)
+            results = [...recommendedResults, ...keywordResults];
 
             // Remove duplicates if any (e.g. overlapping contexts)
             const uniqueIds = new Set();

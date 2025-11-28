@@ -8,6 +8,7 @@ export interface SearchIntent {
     type: 'keyword' | 'verse_key' | 'topic';
     query: string; // The cleaned query or keywords
     verseKey?: string; // If specific verse is requested
+    recommendedVerses?: string[]; // List of specific verse keys to fetch (e.g. ["17:78", "2:255"])
 }
 
 export async function understandQuery(userQuery: string): Promise<SearchIntent> {
@@ -17,29 +18,29 @@ export async function understandQuery(userQuery: string): Promise<SearchIntent> 
     }
 
     const prompt = `
-  You are an expert Quran search assistant. Your goal is to understand the user's intent, even if they use phonetic spelling or broad concepts.
+  You are an expert Quran search assistant. Your goal is to understand the user's intent and recommend specific verses if possible.
   
   Query: "${userQuery}"
   
   Instructions:
-  1. **Phonetic Correction**: If the user uses phonetic spelling (e.g., "Emaam", "Wudu", "Salah"), convert it to the standard English or Transliterated spelling (e.g., "Imam", "Wudu", "Salah").
-  2. **Semantic Search**: If the user asks for a concept (e.g., "Leader"), include relevant Arabic terms (e.g., "Imam") in the query to broaden the search.
-  3. **Question Answering**: If the user asks a question (e.g., "when to pray"), convert it into a search query with the core concepts and relevant Quranic terms (e.g., "prayer times dawn sun decline").
-  4. **Keywords**: Extract the most relevant keywords for a search engine.
+  1. **Direct Recommendations**: If the user asks a question or topic that has famous or specific answers in the Quran, provide the verse keys in "recommendedVerses".
+     - Example: "prayer times" -> ["17:78", "11:114", "20:130"]
+     - Example: "Ayatul Kursi" -> ["2:255"]
+  2. **Phonetic/Semantic**: Handle phonetic spelling and synonyms as before.
+  3. **Keywords**: Generate broad search keywords for the search engine.
   
   Output JSON only:
   {
     "type": "keyword" | "verse_key" | "topic",
-    "query": "optimized search keywords (include synonyms/Arabic terms if helpful)",
-    "verseKey": "chapter:verse" (only if specific verse is requested)
+    "query": "optimized search keywords",
+    "verseKey": "chapter:verse" (only if a SINGLE specific verse is clearly requested),
+    "recommendedVerses": ["chapter:verse", "chapter:verse"] (list of relevant verses to fetch directly)
   }
   
   Examples:
-  "verses about patience" -> {"type": "topic", "query": "patience sabr"}
-  "surah baqarah verse 255" -> {"type": "verse_key", "query": "Ayatul Kursi", "verseKey": "2:255"}
-  "what are the recommended times to pray" -> {"type": "topic", "query": "prayer times salah dawn noon night"}
+  "verses about patience" -> {"type": "topic", "query": "patience sabr", "recommendedVerses": ["2:153", "39:10"]}
+  "what are the recommended times to pray" -> {"type": "topic", "query": "prayer times salah", "recommendedVerses": ["17:78", "11:114", "20:130", "30:17"]}
   "tell me about moses" -> {"type": "keyword", "query": "Moses Musa"}
-  "what does the quran say about emaam" -> {"type": "topic", "query": "Imam Leader"}
   `;
 
     try {
