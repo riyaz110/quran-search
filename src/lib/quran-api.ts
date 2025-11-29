@@ -102,7 +102,7 @@ export async function getSurahVerses(chapterId: number): Promise<Verse[]> {
         // First fetch to get verses and total count (if available) or just first page
         const perPage = 50;
         const params = `language=en&words=true&translations=${Object.values(EDITIONS).join(',')}&fields=text_uthmani&per_page=${perPage}`;
-        const response = await fetch(`${BASE_URL}/verses/by_chapter/${chapterId}?${params}&page=1`);
+        const response = await fetch(`${BASE_URL}/verses/by_chapter/${chapterId}?${params}&page=1`, { cache: 'no-store' });
 
         if (!response.ok) return [];
         const data = await response.json();
@@ -118,7 +118,7 @@ export async function getSurahVerses(chapterId: number): Promise<Verse[]> {
             const promises = [];
             for (let p = 2; p <= totalPages; p++) {
                 promises.push(
-                    fetch(`${BASE_URL}/verses/by_chapter/${chapterId}?${params}&page=${p}`)
+                    fetch(`${BASE_URL}/verses/by_chapter/${chapterId}?${params}&page=${p}`, { cache: 'no-store' })
                         .then(res => res.json())
                         .then(d => d.verses)
                 );
