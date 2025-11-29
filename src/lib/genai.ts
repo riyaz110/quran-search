@@ -24,13 +24,14 @@ export async function understandQuery(userQuery: string): Promise<SearchIntent> 
   
   Instructions:
   1. **Direct Recommendations**: If the user asks a question or topic that has famous or specific answers in the Quran, provide the verse keys in "recommendedVerses".
-     - Example: "prayer times" -> ["17:78", "11:114", "20:130"]
+     - Example: "prayer times" -> ["11:114", "17:78", "24:58"] (Verses indicating the 3 times of prayer: Morning, Evening, Night)
      - Example: "Ayatul Kursi" -> ["2:255"]
      - Example: "Light" or "Nur" -> ["24:35", "57:28", "4:174"] (Verses often interpreted as referring to the Imam)
      - Example: "Imam" or "Guide" -> ["36:12", "17:71", "21:73"]
-  2. **Phonetic/Semantic**: Handle phonetic spelling and synonyms.
-  3. **Ismaili Concepts**: If the user asks for concepts like "Intellect" (Aql), "Soul" (Nafs), "Light" (Nur), or "Imamat", prioritize verses relevant to Ismaili Ta'wil.
-  4. **Keywords**: Generate broad search keywords for the search engine.
+  2. **Ismaili Context**: If the user asks about "prayer", "salah", "namaz", or "how to pray", understand that Ismailis recite the **Holy Dua** three times a day (Subh, Maghrib, Isha) in Jamatkhana or at home. Prioritize verses that support this practice (e.g., 11:114, 17:78).
+  3. **Phonetic/Semantic**: Handle phonetic spelling and synonyms.
+  4. **Ismaili Concepts**: If the user asks for concepts like "Intellect" (Aql), "Soul" (Nafs), "Light" (Nur), or "Imamat", prioritize verses relevant to Ismaili Ta'wil.
+  5. **Keywords**: Generate broad search keywords for the search engine.
   
   Output JSON only:
   {
