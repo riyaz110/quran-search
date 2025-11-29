@@ -16,12 +16,12 @@ export function VerseCard({ verse, showYusufAli, showPickthall, showSahih, showT
         <div id={id} className="group relative bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 hover:border-primary/30 hover:shadow-lg transition-all duration-300 overflow-hidden">
             {/* Verse Key Badge */}
             <div className="absolute top-0 left-0 bg-gray-50 dark:bg-gray-700/50 px-4 py-2 rounded-br-xl border-b border-r border-gray-100 dark:border-gray-700 z-10">
-                <Link
+                <a
                     href={`/surah/${verse.verse_key.split(':')[0]}#${verse.verse_key}`}
-                    className="text-sm font-semibold text-gray-600 dark:text-gray-300 hover:text-primary transition-colors"
+                    className="text-sm font-semibold text-gray-600 dark:text-gray-300 hover:text-primary transition-colors block"
                 >
                     {verse.verse_key}
-                </Link>
+                </a>
             </div>
 
             <div className="p-6 pt-12 md:p-8 md:pt-8 flex flex-col gap-8">

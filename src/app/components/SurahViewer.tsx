@@ -57,13 +57,13 @@ export default function SurahViewer({
                 <div className="max-w-4xl mx-auto flex items-center justify-between gap-4">
                     {/* Left: Back & Dropdown */}
                     <div className="flex items-center gap-3 flex-1">
-                        <Link href="/" className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors">
+                        <a href="/" className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors">
                             <ArrowLeft className="w-5 h-5 text-gray-500" />
-                        </Link>
+                        </a>
 
-                        <Link href="/" className="hidden md:block font-bold text-lg tracking-tight text-primary hover:opacity-80 transition-opacity mr-4">
+                        <a href="/" className="hidden md:block font-bold text-lg tracking-tight text-primary hover:opacity-80 transition-opacity mr-4">
                             Riyaz's Quran Search
-                        </Link>
+                        </a>
 
                         <div className="relative group">
                             <select
