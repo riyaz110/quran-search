@@ -28,9 +28,12 @@ export async function understandQuery(userQuery: string): Promise<SearchIntent> 
      - Example: "Ayatul Kursi" -> ["2:255"]
      - Example: "Light" or "Nur" -> ["24:35", "57:28", "4:174"] (Verses often interpreted as referring to the Imam)
      - Example: "Imam" or "Guide" -> ["36:12", "17:71", "21:73"]
+     - Example: "Dasond" or "Zakat" -> ["9:103", "6:141"] (Purification of wealth)
+     - Example: "Bandagi" or "Ibadat" or "Night Prayer" -> ["73:1", "73:6", "17:79", "32:16"] (Bait-ul-Khayal / Night Vigil)
+     - Example: "Nass" or "Succession" -> ["5:67", "4:59", "3:33"] (Designation of the Imam)
   2. **Ismaili Context**: If the user asks about "prayer", "salah", "namaz", or "how to pray", understand that Ismailis recite the **Holy Dua** three times a day (Subh, Maghrib, Isha) in Jamatkhana or at home. Prioritize verses that support this practice (e.g., 11:114, 17:78).
   3. **Phonetic/Semantic**: Handle phonetic spelling and synonyms.
-  4. **Ismaili Concepts**: If the user asks for concepts like "Intellect" (Aql), "Soul" (Nafs), "Light" (Nur), or "Imamat", prioritize verses relevant to Ismaili Ta'wil.
+  4. **Ismaili Concepts**: If the user asks for concepts like "Intellect" (Aql), "Soul" (Nafs), "Light" (Nur), "Imamat", "Dasond", "Bandagi", or "Nass", prioritize verses relevant to Ismaili Ta'wil.
   5. **Keywords**: Generate broad search keywords for the search engine.
   
   Output JSON only:
@@ -46,6 +49,8 @@ export async function understandQuery(userQuery: string): Promise<SearchIntent> 
   "what are the recommended times to pray" -> {"type": "topic", "query": "prayer times salah", "recommendedVerses": ["17:78", "11:114", "20:130", "30:17"]}
   "tell me about moses" -> {"type": "keyword", "query": "Moses Musa"}
   "concept of imam" -> {"type": "topic", "query": "Imam Guide Leader", "recommendedVerses": ["36:12", "17:71"]}
+  "what is dasond" -> {"type": "topic", "query": "zakat purification wealth", "recommendedVerses": ["9:103", "6:141"]}
+  "verses about bandagi" -> {"type": "topic", "query": "night prayer tahajjud", "recommendedVerses": ["73:6", "17:79"]}
   `;
 
     try {
@@ -73,20 +78,18 @@ export async function generateTawil(verseKey: string, arabicText: string, transl
     Arabic: ${arabicText}
     Translation: ${translation}
     
-    **Sources & Priorities:**
-    1. **Aga Khan IV (The Present Imam)**: Prioritize any Farmans, speeches, or interviews where he references this verse or concept.
-    2. **Previous Imams**: Cite works or sayings of previous Imams (e.g., Imam Sultan Muhammad Shah, Imam Ali).
-    3. **Ismaili Scholars**: Cite Allamah Nasir Hunzai, Nasir Khusraw (Knowledge & Liberation), Abu Yaqub al-Sijistani, Nasir al-Din Tusi, or Henry Corbin (Temple & Contemplation).
-    4. **Institute of Ismaili Studies (IIS)**: Reference academic works from IIS.
-    5. **Ismaili Gnosis**: Use concepts from ismailignosis.com.
+    **Sources & Priorities (MUST CITE DIRECTLY):**
+    1. **The Holy Dua**: If this verse is part of the Ismaili Dua (e.g., 4:59, 36:12, 48:10), explicitly mention its place in the Dua (e.g., "Recited in the 2nd Part of the Holy Dua...") and its significance.
+    2. **Farmans of the Aga Khan**: Quote relevant Farmans of Mawlana Hazar Imam or previous Imams if applicable.
+    3. **Quranic Context**: Connect to other relevant verses.
+    4. **Ismaili Scholars**: Cite Allamah Nasir Hunzai, Nasir Khusraw, Sijistani, etc.
     
     **Style:**
-    - Be concise but profound (max 2-3 sentences).
-    - **Cite your sources explicitly** (e.g., "As Mawlana Hazar Imam stated...", "Nasir Khusraw explains in Knowledge & Liberation...").
-    - If no direct Ta'wil exists for this specific verse, look for neighboring verses or general Ismaili concepts related to the keywords in the verse.
-    - If you are inferring the Ta'wil based on general principles, state: "From an Ismaili Gnosis perspective..."
+    - Be concise but profound (max 3-4 sentences).
+    - **MANDATORY**: You MUST provide direct quotes or specific references (e.g., "As recited in the Dua...", "Mawlana Hazar Imam has said...", "In Knowledge & Liberation, Nasir Khusraw states...").
+    - If explaining concepts like Dasond, Bandagi, or Nass, link them to the verse.
     
-    Output just the text of the Ta'wil. Do not use markdown formatting like bolding the whole thing.
+    Output just the text of the Ta'wil.
     `;
 
     try {
