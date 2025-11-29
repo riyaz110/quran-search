@@ -18,7 +18,7 @@ export default function SurahViewer({
     currentChapterId: number
 }) {
     const router = useRouter();
-    const [verses, setVerses] = useState<Verse[]>(initialVerses);
+    const verses = initialVerses;
 
     // Translation Toggles
     const [showYusufAli, setShowYusufAli] = useState(true);
