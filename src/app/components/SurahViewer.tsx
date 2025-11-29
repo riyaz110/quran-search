@@ -61,7 +61,7 @@ export default function SurahViewer({
                             <ArrowLeft className="w-5 h-5 text-gray-500" />
                         </a>
 
-                        <a href="/" className="hidden md:block font-bold text-lg tracking-tight text-primary hover:opacity-80 transition-opacity mr-4">
+                        <a href="/" className="hidden md:block font-bold text-xl tracking-tight text-primary hover:opacity-80 transition-opacity mr-4">
                             Riyaz's Quran Search
                         </a>
 

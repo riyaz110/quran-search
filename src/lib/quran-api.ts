@@ -104,8 +104,13 @@ export async function getSurahVerses(chapterId: number): Promise<Verse[]> {
         const params = `language=en&words=true&translations=${Object.values(EDITIONS).join(',')}&fields=text_uthmani&per_page=${perPage}`;
         const response = await fetch(`${BASE_URL}/verses/by_chapter/${chapterId}?${params}&page=1`, { cache: 'no-store' });
 
-        if (!response.ok) return [];
+        if (!response.ok) {
+            console.error(`Fetch failed for chapter ${chapterId}: ${response.status} ${response.statusText}`);
+            return [];
+        }
         const data = await response.json();
+        console.log(`Fetched page 1 for chapter ${chapterId}, verses: ${data.verses?.length}, total_pages: ${data.pagination?.total_pages}`);
+
         let verses = data.verses as Verse[];
 
         // If we have pagination info, we can fetch the rest
