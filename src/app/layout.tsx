@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Quran Search",
-  description: "AI-powered Quran Search",
+  title: "Riyaz's Quran Search",
+  description: "AI-powered Quran Search with Ismaili Gnosis",
 };
 
 export default function RootLayout({

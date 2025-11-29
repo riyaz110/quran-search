@@ -45,7 +45,7 @@ export default function SearchApp() {
         <div className="min-h-screen flex flex-col bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans">
             {/* Navbar Placeholder */}
             <nav className="border-b border-gray-100 dark:border-gray-800 py-4 px-6 flex justify-between items-center bg-white dark:bg-gray-900 sticky top-0 z-50">
-                <div className="font-bold text-xl tracking-tight text-primary">Quran.com AI</div>
+                <div className="font-bold text-xl tracking-tight text-primary">Riyaz's Quran Search</div>
                 <div className="flex gap-4 text-sm font-medium text-gray-500">
                     <button className="hover:text-primary transition-colors">Settings</button>
                 </div>
