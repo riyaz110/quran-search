@@ -107,6 +107,13 @@ export default function SurahViewer({
                     </div>
                 )}
 
+                {/* Debug Info */}
+                <div className="bg-red-100 p-4 mb-4 rounded text-xs font-mono text-red-800 overflow-auto">
+                    <p>Verses: {verses.length}</p>
+                    <p>Verse 1 Translations: {verses[0]?.translations?.length || 'undefined'}</p>
+                    <p>Verse 1 Keys: {Object.keys(verses[0] || {}).join(', ')}</p>
+                </div>
+
                 <div className="space-y-4">
                     {verses.map((verse) => (
                         <VerseCard
