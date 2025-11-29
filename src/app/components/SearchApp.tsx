@@ -9,7 +9,12 @@ import Link from 'next/link';
 import { Toggle } from './Toggle';
 import { VerseCard } from './VerseCard';
 
-export default function SearchApp() {
+import { useRouter } from 'next/navigation';
+import { ChevronDown } from 'lucide-react';
+import { Chapter } from '@/lib/quran-api';
+
+export default function SearchApp({ chapters = [] }: { chapters?: Chapter[] }) {
+    const router = useRouter();
     const [query, setQuery] = useState('');
     const [results, setResults] = useState<Verse[]>([]);
     const [loading, setLoading] = useState(false);
@@ -39,6 +44,13 @@ export default function SearchApp() {
             console.error('Search failed:', error);
         } finally {
             setLoading(false);
+        }
+    };
+
+    const handleSurahSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const id = e.target.value;
+        if (id) {
+            router.push(`/surah/${id}`);
         }
     };
 
@@ -97,11 +109,30 @@ export default function SearchApp() {
                     </form>
 
                     {!searched && (
-                        <div className="flex flex-wrap justify-center gap-3 text-sm text-gray-500">
-                            <span className="py-1">Popular:</span>
-                            <button onClick={() => setQuery("Surah Yaseen")} className="px-3 py-1 bg-gray-100 dark:bg-gray-800 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">Surah Yaseen</button>
-                            <button onClick={() => setQuery("Ayatul Kursi")} className="px-3 py-1 bg-gray-100 dark:bg-gray-800 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">Ayatul Kursi</button>
-                            <button onClick={() => setQuery("Stories of Prophets")} className="px-3 py-1 bg-gray-100 dark:bg-gray-800 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">Stories of Prophets</button>
+                        <div className="space-y-6">
+                            <div className="flex flex-wrap justify-center gap-3 text-sm text-gray-500">
+                                <span className="py-1">Popular:</span>
+                                <button onClick={() => setQuery("Surah Yaseen")} className="px-3 py-1 bg-gray-100 dark:bg-gray-800 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">Surah Yaseen</button>
+                                <button onClick={() => setQuery("Ayatul Kursi")} className="px-3 py-1 bg-gray-100 dark:bg-gray-800 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">Ayatul Kursi</button>
+                                <button onClick={() => setQuery("Stories of Prophets")} className="px-3 py-1 bg-gray-100 dark:bg-gray-800 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">Stories of Prophets</button>
+                            </div>
+
+                            {/* Surah Dropdown */}
+                            <div className="relative max-w-xs mx-auto">
+                                <select
+                                    onChange={handleSurahSelect}
+                                    className="w-full appearance-none bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 py-3 px-4 pr-8 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary cursor-pointer"
+                                    defaultValue=""
+                                >
+                                    <option value="" disabled>Navigate by Surah...</option>
+                                    {chapters.map(c => (
+                                        <option key={c.id} value={c.id}>
+                                            {c.id}. {c.name_simple}
+                                        </option>
+                                    ))}
+                                </select>
+                                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+                            </div>
                         </div>
                     )}
                 </div>

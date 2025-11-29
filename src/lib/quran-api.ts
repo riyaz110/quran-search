@@ -99,20 +99,38 @@ export async function getChapters(): Promise<Chapter[]> {
 
 export async function getSurahVerses(chapterId: number): Promise<Verse[]> {
     try {
-        // Fetch all verses for the chapter. 
-        // Note: For very large chapters (e.g. Baqarah), this might be slow.
-        // We'll try to fetch with a large per_page, but standard limit is often 50.
-        // We will fetch page 1 with per_page=50, and if there are more, fetch them.
-
-        // Actually, let's just fetch the first 300 verses (covering most Surahs except Baqarah/Ali Imran/Araf/Shuara which are close).
-        // The API might cap it.
-
-        const params = `language=en&words=true&translations=${Object.values(EDITIONS).join(',')}&fields=text_uthmani&per_page=286`;
-        const response = await fetch(`${BASE_URL}/verses/by_chapter/${chapterId}?${params}`);
+        // First fetch to get verses and total count (if available) or just first page
+        const perPage = 50;
+        const params = `language=en&words=true&translations=${Object.values(EDITIONS).join(',')}&fields=text_uthmani&per_page=${perPage}`;
+        const response = await fetch(`${BASE_URL}/verses/by_chapter/${chapterId}?${params}&page=1`);
 
         if (!response.ok) return [];
         const data = await response.json();
-        return data.verses;
+        let verses = data.verses as Verse[];
+
+        // If we have pagination info, we can fetch the rest
+        // The API v4 usually returns pagination meta. 
+        // If not, we can estimate based on verses length.
+
+        const totalPages = data.pagination?.total_pages || 1;
+
+        if (totalPages > 1) {
+            const promises = [];
+            for (let p = 2; p <= totalPages; p++) {
+                promises.push(
+                    fetch(`${BASE_URL}/verses/by_chapter/${chapterId}?${params}&page=${p}`)
+                        .then(res => res.json())
+                        .then(d => d.verses)
+                );
+            }
+
+            const results = await Promise.all(promises);
+            results.forEach(pageVerses => {
+                verses = [...verses, ...pageVerses];
+            });
+        }
+
+        return verses;
     } catch (error) {
         console.error(`Error fetching surah ${chapterId}:`, error);
         return [];

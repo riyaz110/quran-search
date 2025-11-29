@@ -61,6 +61,10 @@ export default function SurahViewer({
                             <ArrowLeft className="w-5 h-5 text-gray-500" />
                         </Link>
 
+                        <Link href="/" className="hidden md:block font-bold text-lg tracking-tight text-primary hover:opacity-80 transition-opacity mr-4">
+                            Riyaz's Quran Search
+                        </Link>
+
                         <div className="relative group">
                             <select
                                 value={currentChapterId}
