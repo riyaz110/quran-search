@@ -77,3 +77,44 @@ export async function searchVerses(query: string) {
     const data = await response.json();
     return data.search.results;
 }
+
+export interface Chapter {
+    id: number;
+    name_simple: string;
+    name_arabic: string;
+    verses_count: number;
+}
+
+export async function getChapters(): Promise<Chapter[]> {
+    try {
+        const response = await fetch(`${BASE_URL}/chapters`);
+        if (!response.ok) return [];
+        const data = await response.json();
+        return data.chapters;
+    } catch (error) {
+        console.error('Error fetching chapters:', error);
+        return [];
+    }
+}
+
+export async function getSurahVerses(chapterId: number): Promise<Verse[]> {
+    try {
+        // Fetch all verses for the chapter. 
+        // Note: For very large chapters (e.g. Baqarah), this might be slow.
+        // We'll try to fetch with a large per_page, but standard limit is often 50.
+        // We will fetch page 1 with per_page=50, and if there are more, fetch them.
+
+        // Actually, let's just fetch the first 300 verses (covering most Surahs except Baqarah/Ali Imran/Araf/Shuara which are close).
+        // The API might cap it.
+
+        const params = `language=en&words=true&translations=${Object.values(EDITIONS).join(',')}&fields=text_uthmani&per_page=286`;
+        const response = await fetch(`${BASE_URL}/verses/by_chapter/${chapterId}?${params}`);
+
+        if (!response.ok) return [];
+        const data = await response.json();
+        return data.verses;
+    } catch (error) {
+        console.error(`Error fetching surah ${chapterId}:`, error);
+        return [];
+    }
+}
