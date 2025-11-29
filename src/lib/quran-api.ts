@@ -24,6 +24,7 @@ export interface Verse {
             text: string;
         }
     }[];
+    tawil?: string;
 }
 
 /**

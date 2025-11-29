@@ -187,6 +187,29 @@ function VerseCard({ verse, showYusufAli, showPickthall, showSahih, showTranslit
                     </p>
                 </div>
 
+                {/* Ismaili Ta'wil Box */}
+                {verse.tawil && (
+                    <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-[#00A693]/5 to-[#00A693]/10 border border-[#00A693]/20 p-6 shadow-sm">
+                        <div className="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 opacity-10">
+                            <img src="/ismaili-icon.png" alt="Ismaili Icon" className="w-full h-full object-contain" />
+                        </div>
+
+                        <div className="flex gap-4 relative z-10">
+                            <div className="flex-shrink-0 pt-1">
+                                <img src="/ismaili-icon.png" alt="Ismaili Icon" className="w-8 h-8 object-contain" />
+                            </div>
+                            <div className="space-y-2">
+                                <h4 className="text-sm font-bold text-[#00A693] uppercase tracking-wider flex items-center gap-2">
+                                    Ismaili Gnosis & Ta'wil
+                                </h4>
+                                <p className="text-base text-gray-700 dark:text-gray-300 leading-relaxed font-serif italic">
+                                    "{verse.tawil}"
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
                 {/* Translations */}
                 <div className="space-y-6 w-full">
                     {showTransliteration && (

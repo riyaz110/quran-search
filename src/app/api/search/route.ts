@@ -1,13 +1,13 @@
 import { NextResponse } from 'next/server';
-import { understandQuery } from '@/lib/genai';
-import { searchVerses, getVerseWithContext, Verse } from '@/lib/quran-api';
+import { understandQuery, generateTawil } from '@/lib/genai';
+import { getVerseWithContext, searchVerses, Verse, EDITIONS } from '@/lib/quran-api';
 
 export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const query = searchParams.get('q');
 
     if (!query) {
-        return NextResponse.json({ error: 'Query is required' }, { status: 400 });
+        return NextResponse.json({ error: 'Query parameter is required' }, { status: 400 });
     }
 
     try {
@@ -74,8 +74,22 @@ export async function GET(request: Request) {
             });
         }
 
-        console.log('Total results returned:', results.length); // DEBUG LOG
-        return NextResponse.json({ intent, results });
+        // 3. Generate Ismaili Ta'wil for the results (Limit to top 5 to avoid rate limits/latency)
+        // We will process them in parallel
+        const resultsWithTawil = await Promise.all(results.slice(0, 5).map(async (verse) => {
+            const translation = verse.translations?.find(t => t.resource_id === EDITIONS.yusufali)?.text || "";
+            const tawil = await generateTawil(verse.verse_key, verse.text_uthmani || "", translation);
+            return { ...verse, tawil: tawil || undefined };
+        }));
+
+        // Combine with the rest of the results (which won't have tawil for now to save time)
+        const finalResults = [
+            ...resultsWithTawil,
+            ...results.slice(5)
+        ];
+
+        console.log('Total results returned:', finalResults.length); // DEBUG LOG
+        return NextResponse.json({ intent, results: finalResults });
     } catch (error) {
         console.error('Search API Error:', error);
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
